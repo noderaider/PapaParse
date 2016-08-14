@@ -43,6 +43,7 @@
 	Papa.BAD_DELIMITERS = ['\r', '\n', '"', Papa.BYTE_ORDER_MARK];
 	Papa.WORKERS_SUPPORTED = !IS_WORKER && !!global.Worker;
 	Papa.SCRIPT_PATH = null;	// Must be set by your code if you use workers and this lib is loaded asynchronously
+	Papa.REQUEST_HEADERS = {};
 
 	// Configurable chunk sizes for local and remote files, respectively
 	Papa.LocalChunkSize = 1024 * 1024 * 10;	// 10 MB
@@ -549,6 +550,10 @@
 			}
 
 			xhr.open('GET', this._input, !IS_WORKER);
+			
+			Object.keys(Papa.REQUEST_HEADERS).forEach(function (headerName) {
+				xhr.setRequestHeader(headerName, Papa.REQUEST_HEADERS[headerName])
+			})
 
 			if (this._config.chunkSize)
 			{
